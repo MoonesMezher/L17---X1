@@ -17,6 +17,6 @@ const bookSchema = new mongoose.Schema({
     tags: {
         type: [String]
     }
-})
+}, { timestamps: true })
 
 module.exports = mongoose.model("Book", bookSchema);;

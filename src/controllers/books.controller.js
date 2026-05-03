@@ -2,9 +2,43 @@ const Book = require("../models/Book")
 
 class BooksController {
     getAll = async (req, res) => {
-        const books = await Book.find();
+        const books = await Book.find().select("-__v -price");
 
         res.status(200).json(books);
+    }
+
+    test = async (req, res) => {
+        const books = await Book.find()
+            .where("pages")
+            .gte(500)
+
+        res.status(200).json(books);
+    }
+
+    pagination = async (req, res) => {
+        const page = req._page;
+        const limit = req._limit;
+
+        /* fun(); */
+
+        const total = await Book.countDocuments();
+        const pages = Math.ceil(total / limit);
+        const next = page < pages;
+        const prev = page > 1;
+
+        const books = await Book.find()
+            .skip((page - 1) * limit)
+            .limit(limit)
+
+        res.status(200).json({
+            total,
+            count: books.length,
+            pages,
+            page,
+            next,
+            prev,
+            books
+        });
     }
 
     getById = async (req, res) => {

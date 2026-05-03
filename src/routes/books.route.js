@@ -3,17 +3,23 @@ const router = express.Router();
 
 const booksController = require("../controllers/books.controller");
 const id = require("../middlewares/id");
+const asyncHandler = require("../utils/asyncHandler");
+const page = require("../middlewares/page");
 
-router.get("/", booksController.getAll)
+router.get("/", asyncHandler(booksController.getAll))
 
-router.get("/statictics", booksController.getStatistics)
+router.get("/test", asyncHandler(booksController.test))
 
-router.get("/:id", [id], booksController.getById)
+router.get("/pagination", [page], asyncHandler(booksController.pagination))
 
-router.post("/", booksController.add)
+router.get("/statictics", asyncHandler(booksController.getStatistics))
 
-router.put("/:id", [id], booksController.update)
+router.get("/:id", [id], asyncHandler(booksController.getById))
 
-router.delete("/:id", [id], booksController.remove)
+router.post("/", asyncHandler(booksController.add))
+
+router.put("/:id", [id], asyncHandler(booksController.update))
+
+router.delete("/:id", [id], asyncHandler(booksController.remove))
 
 module.exports = router
