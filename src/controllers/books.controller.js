@@ -8,9 +8,7 @@ class BooksController {
     }
 
     test = async (req, res) => {
-        const books = await Book.find()
-            .where("pages")
-            .gte(500)
+        const books = await Book.findByPages(500)
 
         res.status(200).json(books);
     }
@@ -44,11 +42,13 @@ class BooksController {
     getById = async (req, res) => {
         const id = req.params.id;
 
-        const book = await Book.findById(id)
+        const book = await Book.findById(id).select("-__v")
 
         if(!book) return res.status(404).json("Not Found");
 
-        res.status(200).json(book)
+        const avg = await book.priceByPage();
+
+        res.status(200).json({ book, avg })
     }
 
     getStatistics = async (req, res) => {

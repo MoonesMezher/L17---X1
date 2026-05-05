@@ -11,6 +11,7 @@ app.use(morgan("dev"));
 
 app.get("/api/health", (req, res) => res.status(200).json("Server is Healthy"))
 app.use("/api/v1/books", require("./routes/books.route"))
+app.use("/api/v1/authors", require("./routes/authors.route"))
 
 app.use(errorHandler)
 app.use(notFound)

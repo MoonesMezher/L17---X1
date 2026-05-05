@@ -17,6 +17,31 @@ const bookSchema = new mongoose.Schema({
     tags: {
         type: [String]
     }
-}, { timestamps: true })
+}, { 
+    toJSON: {
+        virtuals: true
+    },
+    id: false,
+    timestamps: true 
+})
 
-module.exports = mongoose.model("Book", bookSchema);;
+// virtuals
+bookSchema.virtual("info").get(function() {
+    return `${this.title} has pages ${this.pages}`
+})
+
+bookSchema.virtual("tagsLength").get(function() {
+    return this.tags.length;
+})
+// methods
+bookSchema.methods.priceByPage = function() {
+    return this.price / this.pages;
+}
+// statics
+bookSchema.statics.findByPages = function (val) {
+    return this.find()
+        .where("pages")
+        .gte(val);
+}
+
+module.exports = mongoose.model("Book", bookSchema);

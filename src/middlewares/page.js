@@ -5,12 +5,6 @@ const page = (req, res, next) => {
     req._page = page;
     req._limit = limit;
 
-    console.log(
-        "MIDDLEWARE",
-        req._page,
-        req._limit
-    );
-
     next();
 }
 
